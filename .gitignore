@@ -1,0 +1,23 @@
+# Ignore environment variable files
+.env
+.env.*
+
+# Ignore virtual environment directories
+venv/
+.venv/
+
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# VSCode settings (optional)
+.vscode/
+
+# macOS and Linux trash
+.DS_Store
+.Trash-*
+
+# Windows trash
+Thumbs.db
+ehthumbs.db
