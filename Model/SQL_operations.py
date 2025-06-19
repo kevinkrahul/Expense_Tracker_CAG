@@ -28,6 +28,18 @@ def create_table_if_not_exists():
         date DATE,
         time TIME
     );
+
+
+    CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        username TEXT UNIQUE NOT NULL,
+        email TEXT UNIQUE NOT NULL,
+        password_hash TEXT NOT NULL
+    );
+
+    ALTER TABLE transactions
+    ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(id);
+
     """
     cursor.execute(query)
     conn.commit()
@@ -46,11 +58,11 @@ def store_transaction(data: dict) -> bool:
     parsed_time = convert_time_to_24hr_format(raw_time)
     raw_date = data["date"]
     parsed_date = parse_date(raw_date) if raw_date else datetime.now().date()
-
+    user_id = data.get("user_id")
 
     query="""
-        INSERT INTO transactions (type, amount, category, target, source, date, time)
-        VALUES (%s, %s, %s, %s, %s, %s, %s)
+        INSERT INTO transactions (type, amount, category, target, source, date, time,user_id)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
     """
     values = (
         data["type"],
@@ -59,7 +71,8 @@ def store_transaction(data: dict) -> bool:
         data.get("target"),
         source,
         parsed_date,
-        parsed_time
+        parsed_time,
+        user_id
     )
     try:
         cursor.execute(query, values)
@@ -70,7 +83,20 @@ def store_transaction(data: dict) -> bool:
         print(f"❌ Failed to store transaction: {e}")
         conn.rollback()
         return False
-    
+
+# Function to inject user_id into SQL queries
+def inject_user_filter(sql: str, user_id: int) -> str:
+    sql = sql.strip().rstrip(";")  # Remove any trailing semicolon
+
+    if "WHERE" in sql.upper():
+        # Inject user_id after WHERE but before any conditions
+        sql = re.sub(r"(WHERE\s+)", f"\\1user_id = {user_id} AND ", sql, flags=re.IGNORECASE)
+    else:
+        # No WHERE clause? Add one
+        sql = re.sub(r"(FROM\s+transactions)", f"\\1 WHERE user_id = {user_id}", sql, flags=re.IGNORECASE)
+
+    return sql + ";"
+
 
 
 # Function to execute SQL query and fetch results
