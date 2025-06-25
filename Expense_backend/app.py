@@ -36,7 +36,6 @@ cursor = conn.cursor()
 @app.route("/signup", methods=["POST"])
 def signup():
     data = request.get_json()
-    print("Received data:", data)
     username = data["username"]
     email = data["email"]
     password = data["password"]
