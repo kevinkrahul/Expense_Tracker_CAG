@@ -12,7 +12,12 @@ import os
 from dotenv import load_dotenv
 
 app = Flask(__name__)
-CORS(app)  # Allow cross-origin requests from frontend
+CORS(app,
+     supports_credentials=True,
+     resources={r"/*": {"origins": ["http://localhost:3000"]}},
+     expose_headers=["Authorization"],
+     allow_headers=["Content-Type", "Authorization"]
+)
 
 
 load_dotenv()
@@ -66,7 +71,7 @@ def login():
     user = cursor.fetchone()
 
     if user and bcrypt.checkpw(password.encode(), user[1].encode()):
-        token = create_access_token(identity=user[0])
+        token = create_access_token(identity=str(user[0]))
         return jsonify({"token": token})
     return jsonify({"error": "Invalid credentials"}), 401
 
@@ -78,7 +83,7 @@ def login():
 @jwt_required()
 def handle_message():
     try:
-        user_id = get_jwt_identity() 
+        user_id = int(get_jwt_identity())
         print(f"User ID: {user_id}")
         data = request.get_json()
         user_input = data.get("message", "")
@@ -110,8 +115,8 @@ def handle_message():
 
     
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"❌ Error in handle message: {e}")
         return jsonify({"response": "⚠️ Something went wrong on the server."})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=8000)
