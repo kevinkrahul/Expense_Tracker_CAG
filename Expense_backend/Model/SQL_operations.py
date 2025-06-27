@@ -7,12 +7,13 @@ from datetime import datetime, timedelta
 load_dotenv()
 
 # Initialize your database connection (update with your DB credentials)
-conn = psycopg2.connect(
-    host=os.getenv("PG_HOST"),
-    database=os.getenv("PG_NAME"),
-    user=os.getenv("PG_USER"),
-    password=os.getenv("PG_PASSWORD")
-)
+# conn = psycopg2.connect(
+#     host=os.getenv("PG_HOST"),
+#     database=os.getenv("PG_NAME"),
+#     user=os.getenv("PG_USER"),
+#     password=os.getenv("PG_PASSWORD")
+# )
+conn = psycopg2.connect(os.getenv("DATABASE_URL"))
 cursor = conn.cursor()
 
 # Function to create the transactions table if it doesn't exist

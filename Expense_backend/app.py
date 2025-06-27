@@ -13,10 +13,11 @@ from dotenv import load_dotenv
 
 app = Flask(__name__)
 CORS(app,
-     supports_credentials=True,
-     resources={r"/*": {"origins": ["http://localhost:3000"]}},
-     expose_headers=["Authorization"],
-     allow_headers=["Content-Type", "Authorization"]
+    supports_credentials=True,
+    #  resources={r"/*": {"origins": ["http://localhost:3000"]}},
+    resources={r"/*": {"origins": "*"}},
+    expose_headers=["Authorization"],
+    allow_headers=["Content-Type", "Authorization"]
 )
 
 
@@ -26,12 +27,13 @@ jwt = JWTManager(app)
 
 
 # Initialize your database connection (update with your DB credentials)
-conn = psycopg2.connect(
-    host=os.getenv("PG_HOST"),
-    database=os.getenv("PG_NAME"),
-    user=os.getenv("PG_USER"),
-    password=os.getenv("PG_PASSWORD")
-)
+# conn = psycopg2.connect(
+#     host=os.getenv("PG_HOST"),
+#     database=os.getenv("PG_NAME"),
+#     user=os.getenv("PG_USER"),
+#     password=os.getenv("PG_PASSWORD")
+# )
+conn = psycopg2.connect(os.getenv("DATABASE_URL"))
 cursor = conn.cursor()
 
 
