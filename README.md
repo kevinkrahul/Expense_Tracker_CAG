@@ -90,25 +90,31 @@ Expense_Tracker/
 ```bash
 git clone https://github.com/yourusername/Expense_Tracker.git
 cd Expense_Tracker
+```
 
-
-2. Create .env Files
+### 2. Create .env Files
 Backend (Expense_backend/.env)
 env
 Copy
 Edit
+```bash
 SECRET_KEY=your_secret_key
 DATABASE_URL=postgresql://user:password@db:5432/expense_db
+```
 Frontend (frontend/.env.local)
 env
 Copy
 Edit
+```bash
 NEXT_PUBLIC_API_URL=http://localhost:8000
-3. Run with Docker Compose
+```
+### 3. Run with Docker Compose
 bash
 Copy
 Edit
+```bash
 docker-compose up --build
+```
 This will spin up:
 
 Flask backend at http://localhost:8000
@@ -127,7 +133,7 @@ Tokens are stored in localStorage or HTTP-only cookies
 Secured endpoints require Authorization header:
 Authorization: Bearer <access_token>
 
-🤖 How the AI Agent Works
+### 🤖 How the AI Agent Works
 User Input:
 "How much did I spend on food this month?"
 
@@ -155,19 +161,25 @@ Build & Run:
 bash
 Copy
 Edit
+```bash
 docker-compose up --build
+```
 Stop:
 
 bash
 Copy
 Edit
+```bash
 docker-compose down
+```
 Remove volumes:
 
 bash
 Copy
 Edit
+```bash
 docker-compose down -v
+```
 📬 Contact
 For queries, suggestions, or collaboration, feel free to contact:
 📧 kevin@example.com
