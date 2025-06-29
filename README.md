@@ -4,12 +4,6 @@ An **AI-powered personal finance assistant** that helps you **track your expense
 
 ---
 
-## 🚀 Live Deployments
-
-- **Frontend (Next.js)**: Hosted on Vercel
-- **Backend (Flask API)**: Hosted on Render
-- **[Test a Demo](https://expense.kevinrahul.me/)**
----
 
 ## 🧠 Architecture
 
@@ -74,6 +68,49 @@ Expense_Tracker/
 - 🐳 Dockerized setup for full stack deployment
 - 🌍 Deployed on cloud platforms (Render + Vercel)
 - 🧙 Agentic AI architecture for personalized finance recommendations
+
+
+---
+
+## 🔐 Authentication Flow
+
+  - User logs in via frontend
+  - Backend returns access & refresh tokens
+  - Tokens are stored in localStorage or HTTP-only cookies
+  - Secured endpoints require Authorization header: Authorization: Bearer <access_token>
+
+
+---
+
+### 🤖 How the AI Agent Works
+
+**User Input:**
+"How much did I spend on food this month?"
+
+**Intent Separation (Gemini API):**
+The Gemini API first analyzes the user input and separates it into either:
+  - A contextual statement (e.g., an expense/income to be saved)
+  - A query (e.g., a question requiring a response)
+
+**Contextual Data Handling:**
+If the input is contextual, the extracted data (category, target, amount, date, etc.) is stored into the PostgreSQL database via the Flask API.
+
+**Query Data Handling:**
+  - If the input is identified as a query, the Gemini agent generates an appropriate SQL query based on the user's prompt.
+  - The Flask API executes the SQL query, retrieves the relevant records from PostgreSQL.
+
+**Context Augmentation & Response Generation:**
+The retrieved data is sent back into the Gemini API as part of a structured prompt.
+Gemini then generates an intelligent, personalized response with insights and recommendations.
+
+
+---
+
+## 🚀 Live Deployments
+
+- **Frontend (Next.js)**: Hosted on Vercel
+- **Backend (Flask API)**: Hosted on Render
+- **[Test a Demo](https://expense.kevinrahul.me/)**
 
 
 ---
@@ -174,40 +211,6 @@ docker compose down
 **Flask backend** at [http://localhost:8000](http://localhost:8000)
 
 **Next.js frontend** at [http://localhost:3000](http://localhost:8000)
-
-
----
-
-## 🔐 Authentication Flow
-
-  - User logs in via frontend
-  - Backend returns access & refresh tokens
-  - Tokens are stored in localStorage or HTTP-only cookies
-  - Secured endpoints require Authorization header: Authorization: Bearer <access_token>
-
-
----
-
-### 🤖 How the AI Agent Works
-
-**User Input:**
-"How much did I spend on food this month?"
-
-**Intent Separation (Gemini API):**
-The Gemini API first analyzes the user input and separates it into either:
-  - A contextual statement (e.g., an expense/income to be saved)
-  - A query (e.g., a question requiring a response)
-
-**Contextual Data Handling:**
-If the input is contextual, the extracted data (category, target, amount, date, etc.) is stored into the PostgreSQL database via the Flask API.
-
-**Query Data Handling:**
-  - If the input is identified as a query, the Gemini agent generates an appropriate SQL query based on the user's prompt.
-  - The Flask API executes the SQL query, retrieves the relevant records from PostgreSQL.
-
-**Context Augmentation & Response Generation:**
-The retrieved data is sent back into the Gemini API as part of a structured prompt.
-Gemini then generates an intelligent, personalized response with insights and recommendations.
 
 
 ---
