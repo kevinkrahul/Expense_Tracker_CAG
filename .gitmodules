@@ -1,6 +1,4 @@
-[submodule "frontend"]
-	path = frontend
-	url = https://github.com/kevinkrahul/Bot-Frontend-MusicRecommendation.git
 [submodule "Expense_frontend"]
 	path = Expense_frontend
 	url = https://github.com/kevinkrahul/Expense_Frontend.git
+	branch = main
