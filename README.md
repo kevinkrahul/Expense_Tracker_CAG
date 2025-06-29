@@ -6,8 +6,8 @@ An **AI-powered personal finance assistant** that helps you **track your expense
 
 ## 🚀 Live Deployments
 
-- **Frontend (Next.js)**: [Hosted on Vercel]
-- **Backend (Flask API)**: [Hosted on Render](https://render.com)
+- **Frontend (Next.js)**: Hosted on Vercel
+- **Backend (Flask API)**: Hosted on Render
 - **[Test a Demo](https://expense.kevinrahul.me/)**
 ---
 
