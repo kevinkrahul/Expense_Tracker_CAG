@@ -35,7 +35,7 @@ The agent processes user prompts (like `"Where did I spend the most this month?"
 ---
 
 ## 📁 Project Structure
-
+```bash
 Expense_Tracker/
 ├─ Expense_backend/
 │   ├── app.py
@@ -57,7 +57,7 @@ Expense_Tracker/
 ├── .env
 ├── .gitignore
 └── README.md
-
+```
 
 ---
 
@@ -68,7 +68,7 @@ Expense_Tracker/
 - 📊 Expense breakdowns by category & date
 - 🧠 AI-driven answers using Gemini for prompts like:
   - “Where did I spend the most this week?”
-  - “How can I save more based on my spending habits?”
+  - “How can I save more based on my expenses and income?”
 - 🧾 Stores all data securely in PostgreSQL
 - 📱 Mobile-Responsive UI
 - 🐳 Dockerized setup for full stack deployment
