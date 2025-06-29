@@ -6,9 +6,9 @@ An **AI-powered personal finance assistant** that helps you **track your expense
 
 ## 🚀 Live Deployments
 
-- **Frontend (Next.js)**: [Hosted on Vercel](https://vercel.com)
+- **Frontend (Next.js)**: [Hosted on Vercel]
 - **Backend (Flask API)**: [Hosted on Render](https://render.com)
-
+- **[Test a Demo](https://expense.kevinrahul.me/)**
 ---
 
 ## 🧠 Architecture
@@ -37,22 +37,25 @@ The agent processes user prompts (like `"Where did I spend the most this month?"
 ## 📁 Project Structure
 
 Expense_Tracker/
-├── Expense_backend/
-│ ├── app.py
-│ ├── routes/
-│ ├── models/
-│ ├── utils/
-│ ├── auth/
-│ ├── requirements.txt
-│ └── Dockerfile
-├── frontend/
-│ ├── app/
-│ ├── components/
-│ ├── pages/
-│ ├── public/
-│ ├── .env.local
-│ └── Dockerfile
+├─ Expense_backend/
+│   ├── app.py
+│   ├── models/
+│     ├── Model_Generator.py
+│     └── SQL_operations.py
+│   ├── .env
+│   ├── requirements.txt
+│   └── Dockerfile
+├── Expense_frontend/
+│   ├── .github/
+│   ├── app/
+│   ├── components/
+│   ├── pages/
+│   ├── public/
+│   ├── .env.local
+│   └── Dockerfile
 ├── docker-compose.yml
+├── .env
+├── .gitignore
 └── README.md
 
 
@@ -67,19 +70,11 @@ Expense_Tracker/
   - “Where did I spend the most this week?”
   - “How can I save more based on my spending habits?”
 - 🧾 Stores all data securely in PostgreSQL
+- 📱 Mobile-Responsive UI
 - 🐳 Dockerized setup for full stack deployment
 - 🌍 Deployed on cloud platforms (Render + Vercel)
 - 🧙 Agentic AI architecture for personalized finance recommendations
 
----
-
-## 🆕 Extra Features (Planned or Optional)
-
-- 📅 Recurring Expense Scheduling
-- 🔔 Budget Limit Alerts via Email
-- 📈 Export Reports (PDF/CSV)
-- 📱 Mobile-Responsive UI
-- 🌐 Multi-language Support
 
 ---
 
@@ -88,100 +83,156 @@ Expense_Tracker/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/Expense_Tracker.git
-cd Expense_Tracker
+git clone https://github.com/kevinkrahul/Expense_Tracker_CAG.git
 ```
+
+
+---
 
 ### 2. Create .env Files
+
 Backend (Expense_backend/.env)
-env
-Copy
-Edit
+
 ```bash
-SECRET_KEY=your_secret_key
-DATABASE_URL=postgresql://user:password@db:5432/expense_db
+GEMINI_API_KEY="YOUR_API_KEY"
+PG_HOST="HOST_NAME"
+PG_PORT=PORT_NUMBER
+PG_DATABASE="DATABSE_NAME"
+PG_USER="USER_NAME"
+PG_PASSWORD="DATABASE_PASSWORD"
+JWT_SECRET_KEY="ENTER_RANDOM_KEY"
+DATABASE_URL="DATABASE_URL--NEED-ONLY-YOUR-DEPLOYING-BACKEND-INDIVIDUALLY"
 ```
 Frontend (frontend/.env.local)
-env
-Copy
-Edit
+
 ```bash
-NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_PUBLIC_API_URL="http://localhost:8000"
 ```
-### 3. Run with Docker Compose
-bash
-Copy
-Edit
+
+🐋 Docker Compose file (.env)
 ```bash
-docker-compose up --build
+GEMINI_API_KEY="YOUR_API_KEY"
+PG_HOST="HOST_NAME"
+PG_PORT=PORT_NUMBER
+PG_DATABASE="DATABSE_NAME"
+PG_USER="USER_NAME"
+PG_PASSWORD="DATABASE_PASSWORD"
+JWT_SECRET_KEY="ENTER_RANDOM_KEY"
+DATABASE_URL="DATABASE_URL--NEED-ONLY-YOUR-DEPLOYING-BACKEND-INDIVIDUALLY"
+NEXT_PUBLIC_API_URL="http://localhost:8000"
+BACKEND_PORT=8000
+FRONTEND_PORT=3000
 ```
-This will spin up:
 
-Flask backend at http://localhost:8000
 
-Next.js frontend at http://localhost:3000
+---
 
-PostgreSQL database at port 5432
+### 3. 🐋 Built and run your docker files seperatly for **Backend** & **Frontend**
 
-🔐 Authentication Flow
-User logs in via frontend
+```bash
+docker build -t "image_name" .
+docker run "image_name"
+```
 
-Backend returns access & refresh tokens
+---
 
-Tokens are stored in localStorage or HTTP-only cookies
+### 4. Run your **Backend** 
 
-Secured endpoints require Authorization header:
-Authorization: Bearer <access_token>
+```bash
+cd Expense_backend
+python app.py
+```
+
+---
+
+### 5. Run your **Frontend**
+
+```bash
+cd Expense_frontend
+npm run dev
+```
+
+---
+
+### 6. 🐋 Docker Compose **EASY TO RUN**
+
+```bash
+docker compose up --build
+```
+
+**To stop:**
+
+```bash
+docker compose down
+```
+
+
+---
+
+## This will spin up:
+
+**Flask backend** at [http://localhost:8000](http://localhost:8000)
+
+**Next.js frontend** at [http://localhost:3000](http://localhost:8000)
+
+
+---
+
+## 🔐 Authentication Flow
+
+  - User logs in via frontend
+  - Backend returns access & refresh tokens
+  - Tokens are stored in localStorage or HTTP-only cookies
+  - Secured endpoints require Authorization header: Authorization: Bearer <access_token>
+
+
+---
 
 ### 🤖 How the AI Agent Works
-User Input:
+
+**User Input:**
 "How much did I spend on food this month?"
 
-Backend Query:
-Flask API queries PostgreSQL for expenses with category food and current month.
+**Intent Separation (Gemini API):**
+The Gemini API first analyzes the user input and separates it into either:
+  - A contextual statement (e.g., an expense/income to be saved)
+  - A query (e.g., a question requiring a response)
 
-Context Sent to Gemini:
-Expense data is embedded into the prompt.
+**Contextual Data Handling:**
+If the input is contextual, the extracted data (category, target, amount, date, etc.) is stored into the PostgreSQL database via the Flask API.
 
-Gemini Response:
-Generates an intelligent response with insights and recommendations.
+**Query Data Handling:**
+  - If the input is identified as a query, the Gemini agent generates an appropriate SQL query based on the user's prompt.
+  - The Flask API executes the SQL query, retrieves the relevant records from PostgreSQL.
 
-🧪 Sample Prompt & Output
-Prompt:
+**Context Augmentation & Response Generation:**
+The retrieved data is sent back into the Gemini API as part of a structured prompt.
+Gemini then generates an intelligent, personalized response with insights and recommendations.
 
-"Where did I spend the most this month and on what?"
 
-AI Response:
+---
 
-"You spent the most on Dining (₹3,250), particularly at Starbucks and Zomato. You could reduce this by meal prepping 2 days a week."
+## 🧪 Sample Prompt & Output
 
-🐋 Docker Commands Reference
-Build & Run:
+## Prompt:
+  - "I spent 1750 on starbucks today"
+  - "I spent 1294 on dress shopping yesterday"
+  - "I spent 10 for tea today"
+  - "How much I spend this month and on what?"
+  - "How much I sent this month and on which target?"
+    
+## AI Response:
+  - "Got it, that expense is added to your ledger! 🎉"
+  - "Got it, I've added that transaction to your list! 🎉"
+  - "Got it, that expense is added to your list! 🎉"
+  - "Okay, so this month you spent ₹1760 on food and ₹1294 on shopping."
+  - "Okay, so this month you've spent ₹1294 on that dress, ₹1750 at Starbucks (treat yourself!), and just ₹10 on tea."
 
-bash
-Copy
-Edit
-```bash
-docker-compose up --build
-```
-Stop:
 
-bash
-Copy
-Edit
-```bash
-docker-compose down
-```
-Remove volumes:
+---
 
-bash
-Copy
-Edit
-```bash
-docker-compose down -v
-```
-📬 Contact
+## 📬 Contact
 For queries, suggestions, or collaboration, feel free to contact:
-📧 kevin@example.com
-🔗 LinkedIn
+📧 senkuresearch@gmail.com
+[🔗 LinkedIn](https://www.linkedin.com/in/kevinkrahul)
 
