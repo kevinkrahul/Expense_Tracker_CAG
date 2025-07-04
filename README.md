@@ -12,6 +12,7 @@ An **AI-powered personal finance assistant** that helps you **track your expense
 
 The agent processes user prompts (like `"Where did I spend the most this month?"`) by retrieving relevant expense records via SQL from PostgreSQL, then generating contextual answers with Gemini API.
 
+![Expense Tracker Architecture](Expense_backend/Model/architecture.png)
 ---
 
 ## 🔧 Tech Stack
